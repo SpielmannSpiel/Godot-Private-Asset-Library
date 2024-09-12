@@ -1,6 +1,7 @@
 # project specific
 /container
 /godot_assets
+/github_assets
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

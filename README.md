@@ -15,10 +15,18 @@ Clone/place your godot asset into the `godot_assets` folder, run the server and 
   * [With Docker](#Docker)
 * Open your browser and navigate to http://127.0.0.1:8080 to validate all is running correctly
 * Setup your Godot instance to use your local asset library
-  * Open the project in Godot where you want the assets to be imported to (the setting is global but the)
+  * Open a/the project in Godot where you want the assets to be imported to
+    * (the setting is global for all projects, but then you can use it instantly)
   * Go to `Editor -> Editor Settings -> General (tab) -> Asset Library -> Available Urls -> Dictionary`
     * `New Key`: `Library Name` (e.g. `Local Asset Library`)
     * `New Value`: `Library URL` (e.g. `http://127.0.0.1:8080/api`)
+
+
+![Open Editor Settings](/github_assets/add_asset_library_1.png "Open Editor Settings")
+![Open Dictionary](/github_assets/add_asset_library_2.png "Open Dictionary")
+![Add type String](/github_assets/add_asset_library_3.png "Add type String")
+![Add Key-Value pair](/github_assets/add_asset_library_4.png "Add Key-Value pair")
+
 
 ### Locally
 
@@ -55,6 +63,7 @@ Running it exposed to the Internet is your responsibility to make it secure!
 
 ## links
 
+* cross-link GitHub / DockerHub
 * assets formats: https://docs.godotengine.org/en/stable/community/asset_library/submitting_to_assetlib.html
 * GODOT API: https://github.com/godotengine/godot-asset-library/blob/master/API.md#api-get-configure
 * Inspiration: https://github.com/christinoleo/godot-custom-assetlib/tree/master / https://github.com/christinoleo/godot-custom-assetlib/tree/master/backend
