@@ -1,0 +1,10 @@
+{% for asset in asset_list %}
+	<tr>
+        <td><img class="asset-logo" alt="Logo for {{ asset.title }}" src="{{ asset.icon_url }}"></td>
+        <td>{{ asset.title }}</td>
+        <td>{{ asset.version }}</td>
+        <td>{{ asset.godot_version }}</td>
+        <td>TBD: Buttons</td>
+        <td>{{ asset.modify_date }}</td>
+    </tr>
+{% endfor %}

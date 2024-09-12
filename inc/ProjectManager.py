@@ -10,6 +10,8 @@ class ProjectManager:
         self.projects: list[Project] = []
 
     def load_projects(self):
+        self.projects = []
+
         for root, dirs, _ in os.walk(settings.godto_assets_path_local):
             for dir_name in dirs:
                 if dir_name.startswith('.'):
