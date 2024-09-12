@@ -2,6 +2,7 @@
 /container
 /godot_assets
 /github_assets
+/cache
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
