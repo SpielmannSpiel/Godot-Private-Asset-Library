@@ -185,5 +185,5 @@ godot_assets/*
 git_repos/*
 !git_repos/.gitkeep
 
-cache/
+cache/*
 !cache/.gitkeep
