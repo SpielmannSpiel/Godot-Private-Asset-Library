@@ -178,5 +178,9 @@ pyrightconfig.json
 # own
 
 venvs/
+
+godot_assets/*
+!godot_assets/.gitkeep
+
 git_repos/*
 !git_repos/.gitkeep

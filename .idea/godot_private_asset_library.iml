@@ -2,8 +2,8 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/git_repos" />
       <excludeFolder url="file://$MODULE_DIR$/venvs/venv_3_10" />
+      <excludeFolder url="file://$MODULE_DIR$/godot_assets" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

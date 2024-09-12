@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  godot_asset_library:
+    container_name: godot_asset_library
+    build:
+      context: .
+      dockerfile: container/Dockerfile
+    volumes:
+      - ./godot_assets:/app/godot_assets
+    ports:
+      - "8080:8080"
