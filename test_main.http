@@ -1,11 +1,16 @@
 # Test your FastAPI endpoints
 
-GET http://127.0.0.1:8000/
+GET http://127.0.0.1:8080/
+Accept: text/html
+
+###
+
+GET http://127.0.0.1:8080/api/asset
 Accept: application/json
 
 ###
 
-GET http://127.0.0.1:8000/hello/User
-Accept: application/json
+GET http://127.0.0.1:8080/static/icon.png
+Accept: image/png
 
 ###

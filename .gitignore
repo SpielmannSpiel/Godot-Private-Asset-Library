@@ -177,5 +177,6 @@ pyrightconfig.json
 
 # own
 
+venvs/
 git_repos/*
 !git_repos/.gitkeep

@@ -2,9 +2,12 @@ import os
 from typing import Annotated
 
 from fastapi import FastAPI
+from fastapi import Request
 from fastapi.params import Query
+from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 
 from config import settings
@@ -12,16 +15,16 @@ from config import settings
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World from " + settings.app_name}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+async def root(request: Request):
+    return templates.TemplateResponse(
+        name="home.html",
+        request=request,
+        context=settings.get_frontend_save_context()
+    )
 
 
 @app.get("/favicon.ico", include_in_schema=False)

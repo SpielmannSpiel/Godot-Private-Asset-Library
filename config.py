@@ -9,5 +9,11 @@ class Settings(BaseSettings):
     port: int = 8080
     url: str = f"{protocol}://{domain}:{port}"
 
+    def get_frontend_save_context(self):
+        return {
+            "app_name": self.app_name,
+            "url": self.url
+        }
+
 
 settings = Settings()
