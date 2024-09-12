@@ -1,4 +1,7 @@
 import os
+import time
+from timeit import default_timer
+from tokenize import endpats
 from typing import Annotated
 
 from fastapi import FastAPI
@@ -9,13 +12,15 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-
 from config import settings
-
+from inc.ProjectManager import ProjectManager
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+project_manager = ProjectManager()
+project_manager.load_projects()
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
@@ -32,10 +37,32 @@ async def get_favicon():
     return FileResponse("static/icon.ico")
 
 
+@app.get('/api/refresh_projects')
+async def refresh_projects():
+    start_time = default_timer()
+    project_manager.load_projects()
+    end_time = default_timer()
+
+    duration = end_time - start_time
+
+    if duration < 1:
+        time.sleep(1 - duration)
+
+    return {
+        "status": "ok",
+        "duration": duration
+    }
+
+
 @app.get('/api/configure')
 async def get_config():
     return {
         "categories": [
+            {
+                "id": "0",
+                "name": "Other",
+                "type": "0"
+            },
             {
                 "id": "1",
                 "name": "2D Tools",
@@ -53,60 +80,21 @@ async def get_config():
 
 
 @app.get('/api/asset')
-async def list_dummy():
+async def list_assets():
+    asset_list = []
+
+    for project_ready in project_manager.get_projects_api_ready():
+        asset_list.append(project_ready)
+
     return {
         "page": 0,
         "pages": 0,
         "page_length": 10,
-        "total_items": 1,
-        "result": [
-            {
-                "asset_id": "snake_asset",
-                "title": "Snake",
-                "author": "test",
-                "author_id": "1",
-                "category": "2D Tools",
-                "category_id": "1",
-                "godot_version": "2.1",
-                "rating": "5",
-                "cost": "GPLv3",
-                "support_level": "testing",
-                "icon_url": settings.url + "/static/icon.png",
-                "version": "1",
-                "version_string": "alpha",
-                "modify_date": "2018-08-21 15:49:00"
-            }
-        ]
+        "total_items": len(asset_list),
+        "result": asset_list
     }
 
 
 @app.get('/api/asset/{asset_id}')
-async def get_dummy(asset_id: str):
-    asset_name = asset_id
-
-    return {
-        "asset_id": asset_id,
-        "type": "addon",
-        "title": "Snake",
-        "author": "test",
-        "author_id": "1",
-        "version": "1",
-        "version_string": "alpha",
-        "category": "2D Tools",
-        "category_id": "1",
-        "godot_version": "2.1",
-        "rating": "5",
-        "cost": "GPLv3",
-        "description": "Lorem ipsum…",
-        "support_level": "testing",
-        "download_provider": "GitHub",
-        "download_commit": "master",
-        "download_hash": "",  # if blank, verification is skipped
-        "browse_url": "",
-        "issues_url": "",
-        "icon_url": settings.url + "/assets/icon.png",
-        "searchable": "1",
-        "modify_date": "2018-08-21 15:49:00",
-        "download_url": settings.url + f"/api/download/{asset_name}.zip",
-        "previews": []
-}
+async def get_dummy(asset_id: int):
+    return project_manager.get_project_details_api_ready(asset_id)
