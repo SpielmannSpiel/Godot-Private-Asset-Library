@@ -4,11 +4,14 @@ from typing import Annotated
 from fastapi import FastAPI
 from fastapi.params import Query
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
 
 from config import settings
 
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
@@ -23,13 +26,7 @@ async def say_hello(name: str):
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def get_favicon():
-    return FileResponse("assets/icon.ico")
-
-
-@app.get("/assets/{asset_name}", include_in_schema=False)
-async def get_asset(asset_name: str):
-    # TODO: use annotate with filter: Annotated[str, Query(max_length=50, pattern="^[a-zA-Z0-9_-.]*$")]
-    return FileResponse("assets/" + asset_name)
+    return FileResponse("static/icon.ico")
 
 
 @app.get('/api/configure')
@@ -71,7 +68,7 @@ async def list_dummy():
                 "rating": "5",
                 "cost": "GPLv3",
                 "support_level": "testing",
-                "icon_url": settings.url + "/assets/icon.png",
+                "icon_url": settings.url + "/static/icon.png",
                 "version": "1",
                 "version_string": "alpha",
                 "modify_date": "2018-08-21 15:49:00"
