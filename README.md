@@ -31,7 +31,9 @@ Clone/place your godot asset into the `godot_assets` folder, run the server and 
 ### Locally
 
 * Optionally create a virtual environment with `python -m venv .venv`
-  * Activate the virtual environment with `source .venv/bin/activate` (Mac/Linux) or `.venv\Scripts\activate` (Windows)
+  * Activate the virtual environment with
+    * `source .venv/bin/activate` (Mac/Linux) 
+    * or `.venv\Scripts\activate` (Windows)
 * Install the requirements with `pip install -r requirements.txt`
 * Run the server with `python main.py`
 
