@@ -47,6 +47,14 @@ async def readme(request: Request):
     )
 
 
+@app.get('/api/asset/{asset_folder}/icon')
+async def get_project_icon(asset_folder: str):
+    if "/" in asset_folder or "." in asset_folder:
+        return FileResponse("static/icon.png")
+
+    return FileResponse(f"{settings.godot_assets_path_local}/{asset_folder}/Icon.png")
+
+
 @app.get('/api/refresh_projects')
 async def refresh_projects():
     start_time = default_timer()
@@ -99,7 +107,7 @@ async def list_assets():
     return {
         "page": 0,
         "pages": 0,
-        "page_length": 10,
+        "page_length": len(asset_list),
         "total_items": len(asset_list),
         "result": asset_list
     }
