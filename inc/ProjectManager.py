@@ -1,4 +1,5 @@
 import os
+from timeit import default_timer
 from inc.Project import Project
 
 from config import settings
@@ -19,6 +20,24 @@ class ProjectManager:
 
                 full_path = os.path.abspath(os.path.join(root, dir_name))
                 self.add_project(full_path)
+
+    def create_zip(self, asset_folder: str):
+        for project in self.projects:
+            if project.directory == asset_folder:
+                start_time = default_timer()
+                project.create_zip()
+                end_time = default_timer()
+
+                duration = end_time - start_time
+                return {
+                    "status": "ok",
+                    "duration": duration
+                }
+
+        return {
+            "status": "error",
+            "message": "Project not found"
+        }
 
     def add_project(self, full_path):
         project = Project()
