@@ -14,3 +14,8 @@ GET http://127.0.0.1:8080/static/icon.png
 Accept: image/png
 
 ###
+
+GET http://127.0.0.1:8080/api/asset/dont_exist/icon
+Accept: image/png
+
+###

@@ -75,10 +75,11 @@ async def get_project_icon(asset_folder: str):
 
 @app.get('/api/refresh_projects')
 async def refresh_projects():
-    project_icon_cache.clear()
-
     start_time = default_timer()
+
+    project_icon_cache.clear()
     project_manager.load_projects()
+
     end_time = default_timer()
 
     duration = end_time - start_time
@@ -94,6 +95,7 @@ async def refresh_projects():
 
 @app.get('/api/configure')
 async def get_config():
+    # just static since we have no database and godot has no fields for this
     return {
         "categories": [
             {
