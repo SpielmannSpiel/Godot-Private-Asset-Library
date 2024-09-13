@@ -57,7 +57,7 @@ class ProjectManager:
             "support_level": "testing",
             "icon_url": project.get_icon_url(),
             "version": project.get_combined_version(),
-            "version_string": "alpha",
+            "version_string": project.get_combined_version(),
             "modify_date": project.last_change,
             # own modifications
             "download_url": project.get_zip_url(),
@@ -74,7 +74,7 @@ class ProjectManager:
             "author": project.get_authors(),
             "author_id": "0",
             "version": project.get_combined_version(),
-            "version_string": project.version,
+            "version_string": project.get_combined_version(),
             "category": "Other",
             "category_id": "0",
             "godot_version": project.get_godot_version(),
