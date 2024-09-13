@@ -1,5 +1,6 @@
 import os
 import time
+import asyncio
 from timeit import default_timer
 
 from fastapi import FastAPI
@@ -13,15 +14,16 @@ from readme_renderer import markdown
 from config import settings
 from inc.ProjectManager import ProjectManager
 
+
+project_manager = ProjectManager()
+asyncio.create_task(project_manager.load_projects())
+project_icon_cache = {}
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/github_assets", StaticFiles(directory="github_assets"), name="github_assets")
 app.mount("/cache/zip", StaticFiles(directory="cache/zip"), name="cache_zip")
 templates = Jinja2Templates(directory="templates")
-
-project_manager = ProjectManager()
-project_manager.load_projects()
-project_icon_cache = {}
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
@@ -82,7 +84,7 @@ async def refresh_projects():
     start_time = default_timer()
 
     project_icon_cache.clear()
-    project_manager.load_projects()
+    await project_manager.load_projects()
 
     end_time = default_timer()
 

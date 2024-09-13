@@ -1,4 +1,5 @@
 import os
+import asyncio
 from timeit import default_timer
 from inc.Project import Project
 
@@ -10,16 +11,39 @@ class ProjectManager:
     def __init__(self):
         self.projects: list[Project] = []
 
-    def load_projects(self):
+    async def load_projects(self):
         self.projects = []
+        # when creating Zips
+        #
+        # synchron: Loaded 3 projects in 1.1279935000002297 seconds
+        #           Loaded 3 projects in 1.126190000000861 seconds
+        #
+        # async:    Loaded 3 projects in 1.1048000999999203 seconds
+        #           Loaded 3 projects in 1.1038666999993438 seconds
 
-        for root, dirs, _ in os.walk(settings.godot_assets_path_local):
-            for dir_name in dirs:
-                if dir_name.startswith('.'):
-                    continue
+        paths_to_projects = []
 
-                full_path = os.path.abspath(os.path.join(root, dir_name))
-                self.add_project(full_path)
+        start_time = default_timer()
+        for dir_name in os.listdir(settings.godot_assets_path_local):
+            if dir_name.startswith('.'):
+                continue
+
+            full_path = os.path.abspath(os.path.join(settings.godot_assets_path_local, dir_name))
+
+            if os.path.isfile(full_path):
+                continue
+
+            paths_to_projects.append(full_path)
+
+        tasks = [asyncio.create_task(self.get_project_from_path(project_path)) for project_path in paths_to_projects]
+
+        for coro in asyncio.as_completed(tasks):
+            project = await coro
+            self.projects.append(project)
+
+        end_time = default_timer()
+
+        print(f"Loaded {len(self.projects)} projects in {end_time - start_time} seconds")
 
     def create_zip(self, asset_folder: str):
         for project in self.projects:
@@ -38,6 +62,17 @@ class ProjectManager:
             "status": "error",
             "message": "Project not found"
         }
+
+    @staticmethod
+    async def get_project_from_path(full_path: str):
+        project = Project()
+        if not project.load_from_path(full_path):
+            return False
+
+        if not project.is_zip_up_to_date():
+            project.create_zip()
+
+        return project
 
     def add_project(self, full_path):
         project = Project()
