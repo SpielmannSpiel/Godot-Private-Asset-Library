@@ -4,7 +4,7 @@
         <td>{{ asset.title }}</td>
         <td>{{ asset.version }}</td>
         <td>{{ asset.godot_version }}</td>
-        <td>TBD: Buttons</td>
-        <td>{{ asset.modify_date }}</td>
+        <td>TBD: Buttons<br /><a href="{{ asset.download_url }}">{{ asset.download_url }}</a></td>
+        <td>Asset: {{ asset.modify_date }}<br />Zip: -</td>
     </tr>
 {% endfor %}

@@ -17,6 +17,7 @@ from inc.ProjectManager import ProjectManager
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/github_assets", StaticFiles(directory="github_assets"), name="github_assets")
+app.mount("/cache/zip", StaticFiles(directory="cache/zip"), name="cache_zip")
 templates = Jinja2Templates(directory="templates")
 
 project_manager = ProjectManager()

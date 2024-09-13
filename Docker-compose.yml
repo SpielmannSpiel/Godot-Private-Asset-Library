@@ -8,5 +8,6 @@ services:
       dockerfile: container/Dockerfile
     volumes:
       - ./godot_assets:/app/godot_assets
+      - ./cache/:/app/cache
     ports:
       - "8080:8080"
