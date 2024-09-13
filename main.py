@@ -4,7 +4,6 @@ from timeit import default_timer
 
 from fastapi import FastAPI
 from fastapi import Request
-from fastapi.params import Query
 from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles

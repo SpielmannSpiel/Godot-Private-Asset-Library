@@ -1,6 +1,5 @@
 import os
 from inc.Project import Project
-from urllib.request import pathname2url
 
 from config import settings
 

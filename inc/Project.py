@@ -20,7 +20,8 @@ class Project:
         self.version_godot = ""
         self.last_change = None
         self.zip_date = None
-        self.is_valid = False
+        self.is_valid_git = False
+        self.is_valid_godot = False
         self.authors = set()
         self.license_name = "Proprietary"
         self.git_remote_url = ""
@@ -34,26 +35,31 @@ class Project:
         self.directory = os.path.basename(full_path)
         self.name = os.path.basename(self.full_path)
 
-        self.is_valid = self.is_valid_git_dir()
-        if not self.is_valid:
-            return self.is_valid
+        self.is_valid_git = self.is_valid_git_dir()
 
         try:
             self.repo = Repo(self.full_path)
+            self.is_valid_git = True
         except InvalidGitRepositoryError:
             self.repo = None
-            self.is_valid = False
-            return self.is_valid
+            self.is_valid_git = False
 
         self.godot_file = ProjectGodotFile()
-        self.godot_file.load_file(self.full_path + "/project.godot")
+        self.is_valid_godot = self.godot_file.load_file(self.full_path + "/project.godot")
 
-        self.load_godot_file_data()
-        self.load_git_data()
-        self.zip_date = self.get_zip_datetime()
+        if self.is_valid_godot:
+            self.load_godot_file_data()
 
-        self.is_valid = True
-        return self.is_valid
+        if self.is_valid_git:
+            self.load_git_data()
+
+        if self.is_valid_project():
+            self.zip_date = self.get_zip_datetime()
+
+        return self.is_valid_project()
+
+    def is_valid_project(self):
+        return self.is_valid_git or self.is_valid_godot
 
     def is_valid_git_dir(self):
         return os.path.isdir(os.path.join(self.full_path, ".git"))
@@ -86,7 +92,6 @@ class Project:
             self.version_godot = godot_file_version
 
     def load_git_data(self):
-        self.version = ""
         self.authors = set()
 
         self._load_git_authors()
