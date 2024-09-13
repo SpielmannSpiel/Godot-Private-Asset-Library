@@ -56,11 +56,12 @@ class ProjectManager:
             "cost": project.license_name,
             "support_level": "testing",
             "icon_url": project.get_icon_url(),
-            "version": project.version,
+            "version": project.get_combined_version(),
             "version_string": "alpha",
             "modify_date": project.last_change,
             # own modifications
             "download_url": project.get_zip_url(),
+            "zip_date": project.zip_date,
         }
 
     def get_project_details_api_ready(self, project_index):
@@ -68,11 +69,11 @@ class ProjectManager:
 
         return {
             "asset_id": project_index,
-            "type": "addon",
+            "type": "asset",
             "title": project.name,
             "author": project.get_authors(),
             "author_id": "0",
-            "version": project.version,
+            "version": project.get_combined_version(),
             "version_string": project.version,
             "category": "Other",
             "category_id": "0",

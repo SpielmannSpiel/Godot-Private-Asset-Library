@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from urllib.request import pathname2url
 
 import git
@@ -15,9 +16,10 @@ class Project:
         self.name = ""
         self.directory = ""
         self.full_path = ""
-        self.version = ""
-        self.last_change = ""
-        self.zip_date = ""
+        self.version_git = ""
+        self.version_godot = ""
+        self.last_change = None
+        self.zip_date = None
         self.is_valid = False
         self.authors = set()
         self.license_name = "Proprietary"
@@ -45,10 +47,10 @@ class Project:
 
         self.godot_file = ProjectGodotFile()
         self.godot_file.load_file(self.full_path + "/project.godot")
-        self.name = self.godot_file.get_name(self.name)
 
+        self.load_godot_file_data()
         self.load_git_data()
-        self.zip_date = self.get_zip_date()
+        self.zip_date = self.get_zip_datetime()
 
         self.is_valid = True
         return self.is_valid
@@ -62,11 +64,29 @@ class Project:
     def get_godot_version(self):
         return self.godot_file.get_godot_version()
 
+    def get_combined_version(self):
+        if self.version_godot and self.version_git:
+            return f"{self.version_godot} (git: {self.version_git})"
+
+        if self.version_godot:
+            return self.version_godot
+
+        return "git: " + self.version_git
+
     def get_godot_file(self):
         return self.godot_file
 
+    def load_godot_file_data(self):
+        if not self.godot_file.is_valid:
+            return
+
+        self.name = self.godot_file.get_name(self.name)
+        godot_file_version = self.godot_file.entries.get("config/version", "")
+        if godot_file_version:
+            self.version_godot = godot_file_version
+
     def load_git_data(self):
-        self.version = "0.0.0"
+        self.version = ""
         self.authors = set()
 
         self._load_git_authors()
@@ -75,21 +95,17 @@ class Project:
         self._load_license()
 
         for ref in self.repo.refs:
+            if ref.name.startswith('origin/'):
+                continue
+
             if hasattr(ref, 'tag'):
                 git_tag_ref: git.TagReference = ref
-                self.authors.add(git_tag_ref.commit.author.name)
-                self.version = git_tag_ref.name
+                self.version_git = git_tag_ref.name
                 self.last_change = git_tag_ref.commit.committed_datetime
-                break
             else:
-                pass
-                #git_ref: git.Reference = ref
-                #self.authors.add(git_ref.commit.author.name)
-                # self.version = git_ref.commit.hexsha
-                # self.last_change = git_ref.commit.committed_datetime
-
-        if self.version == "0.0.0" and self.godot_file.is_valid:
-            self.version = self.godot_file.entries.get("config/version", "0.0.0")
+                git_ref: git.Reference = ref
+                self.version_git = git_ref.commit.hexsha[:6]
+                self.last_change = git_ref.commit.committed_datetime
 
     def _load_git_urls(self):
         self.git_remote_url = ""
@@ -126,17 +142,23 @@ class Project:
     def has_zip(self):
         return os.path.isfile(self.get_zip_path())
 
-    def get_zip_date(self):
+    def get_zip_timestamp(self):
         if not self.has_zip():
-            return ""
+            return 0
 
         return os.path.getmtime(self.get_zip_path())
+
+    def get_zip_datetime(self):
+        if not self.has_zip():
+            return None
+
+        return datetime.fromtimestamp(os.path.getmtime(self.get_zip_path())).isoformat()
 
     def is_zip_up_to_date(self):
         if not self.has_zip():
             return False
 
-        zip_time = self.get_zip_date()
+        zip_time = self.get_zip_timestamp()
         asset_time = os.path.getmtime(self.full_path)
 
         if self.repo:
@@ -158,5 +180,5 @@ class Project:
         self.zip_date = ""
         if self.repo:
             self.repo.archive(open(self.get_zip_path(), "wb"), format="zip")
-            self.zip_date = self.get_zip_date()
+            self.zip_date = self.get_zip_datetime()
             return

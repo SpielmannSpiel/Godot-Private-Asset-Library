@@ -22,6 +22,7 @@ templates = Jinja2Templates(directory="templates")
 
 project_manager = ProjectManager()
 project_manager.load_projects()
+project_icon_cache = {}
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
@@ -49,10 +50,14 @@ async def readme(request: Request):
 
 @app.get('/api/asset/{asset_folder}/icon')
 async def get_project_icon(asset_folder: str):
-    if "/" in asset_folder or "." in asset_folder:
+    if any(_char in asset_folder for _char in ["/", "\\", "."]):
         return FileResponse("static/icon.png")
 
     asset_path = f"{settings.godot_assets_path_local}/{asset_folder}"
+
+    if asset_path in project_icon_cache:
+        return FileResponse(project_icon_cache[asset_path])
+
     valid_file_names = ["Icon", "icon"]
     valid_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"]
 
@@ -60,6 +65,7 @@ async def get_project_icon(asset_folder: str):
         for extension in valid_extensions:
             full_icon_path = os.path.join(asset_path, f"{file_name}{extension}")
             if os.path.isfile(full_icon_path):
+                project_icon_cache[asset_path] = full_icon_path
                 return FileResponse(full_icon_path)
 
     # fallback
@@ -68,6 +74,8 @@ async def get_project_icon(asset_folder: str):
 
 @app.get('/api/refresh_projects')
 async def refresh_projects():
+    project_icon_cache.clear()
+
     start_time = default_timer()
     project_manager.load_projects()
     end_time = default_timer()
@@ -92,19 +100,7 @@ async def get_config():
                 "name": "Other",
                 "type": "0"
             },
-            {
-                "id": "1",
-                "name": "2D Tools",
-                "type": "0"
-            },
-            {
-                "id": "2",
-                "name": "Templates",
-                "type": "1"
-            },
         ],
-        #"token": "...",
-        #"login_url": "https://…"
     }
 
 
