@@ -4,7 +4,17 @@
         <td>{{ asset.title }}</td>
         <td>{{ asset.version }}</td>
         <td>{{ asset.godot_version }}</td>
-        <td>TBD: Buttons<br /><a href="{{ asset.download_url }}">{{ asset.download_url }}</a></td>
+        <td>
+            <button
+                class="btn btn-primary"
+                hx-get="/api/asset/{{  asset.asset_folder }}/create_zip"
+                hx-target="#reload-zip-action"
+                hx-trigger="click delay:150ms"
+            >
+                create new zip
+                <img alt="spinner" class="htmx-indicator spinner" src="/static/loading.gif">
+            </button>
+            <br /><a href="{{ asset.download_url }}">{{ asset.download_url }}</a></td>
         <td>Asset: {{ asset.modify_date }}<br />Zip: {{ asset.zip_date }}</td>
     </tr>
 {% endfor %}

@@ -61,6 +61,7 @@ class ProjectManager:
             # own modifications
             "download_url": project.get_zip_url(),
             "zip_date": project.zip_date,
+            "asset_folder": project.directory,
         }
 
     def get_project_details_api_ready(self, project_index):

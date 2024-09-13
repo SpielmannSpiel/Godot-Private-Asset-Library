@@ -9,8 +9,8 @@
     <script src="/static/htmx_2_0_2.min.js"></script>
     <style>
         .spinner {
-            width: 42px;
-            height: 42px;
+            width: 32px;
+            height: 32px;
         }
 
         .asset-logo {
@@ -38,13 +38,14 @@
             <img alt="spinner" class="htmx-indicator spinner" src="/static/loading.gif">
         </button>
         <div id="reload-project-results" hx-target="#projects-table-list" hx-trigger="changed"></div>
+        <div id="reload-zip-action" hx-target="#projects-table-list" hx-trigger="changed"></div>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">Logo</th>
                     <th scope="col">Name</th>
                     <th scope="col">Version</th>
-                    <th scope="col">GD-Version</th>
+                    <th scope="col">Godot</th>
                     <th scope="col">Action</th>
                     <th scope="col">Asset-Date / Zip-Date</th>
                 </tr>

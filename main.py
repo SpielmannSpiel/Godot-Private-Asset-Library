@@ -72,6 +72,25 @@ async def get_project_icon(asset_folder: str):
     return FileResponse("static/icon.png")
 
 
+@app.get('/api/asset/{asset_folder}/create_zip')
+async def create_zip(asset_folder: str):
+    for project in project_manager.projects:
+        if project.directory == asset_folder:
+            start_time = default_timer()
+            project.create_zip()
+            end_time = default_timer()
+
+            duration = end_time - start_time
+            return {
+                "status": "ok",
+                "duration": duration
+            }
+
+    return {
+        "status": "error",
+        "message": "Project not found"
+    }
+
 @app.get('/api/refresh_projects')
 async def refresh_projects():
     start_time = default_timer()
