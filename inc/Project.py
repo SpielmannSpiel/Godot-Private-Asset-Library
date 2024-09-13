@@ -20,6 +20,7 @@ class Project:
         self.zip_date = ""
         self.is_valid = False
         self.authors = set()
+        self.license_name = "Proprietary"
         self.git_remote_url = ""
         self.git_page_url = ""
         self.git_repo_provider = "Unknown"
@@ -69,6 +70,7 @@ class Project:
         self._load_git_authors()
         self._load_git_urls()
         self._load_git_provider()
+        self._load_license()
 
         for ref in self.repo.refs:
             if hasattr(ref, 'tag'):
@@ -139,6 +141,16 @@ class Project:
             asset_time = self.repo.head.commit.committed_date
 
         return zip_time >= asset_time
+
+    def _load_license(self):
+        license_path = os.path.join(self.full_path, "LICENSE")
+        if not os.path.isfile(license_path):
+            license_path = os.path.join(self.full_path, "LICENSE.md")
+
+        if not os.path.isfile(license_path):
+            return
+
+        self.license_name = helper.get_license_name(open(license_path, "r").read())
 
     def create_zip(self):
         self.zip_date = ""

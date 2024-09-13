@@ -52,7 +52,18 @@ async def get_project_icon(asset_folder: str):
     if "/" in asset_folder or "." in asset_folder:
         return FileResponse("static/icon.png")
 
-    return FileResponse(f"{settings.godot_assets_path_local}/{asset_folder}/Icon.png")
+    asset_path = f"{settings.godot_assets_path_local}/{asset_folder}"
+    valid_file_names = ["Icon", "icon"]
+    valid_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"]
+
+    for file_name in valid_file_names:
+        for extension in valid_extensions:
+            full_icon_path = os.path.join(asset_path, f"{file_name}{extension}")
+            if os.path.isfile(full_icon_path):
+                return FileResponse(full_icon_path)
+
+    # fallback
+    return FileResponse("static/icon.png")
 
 
 @app.get('/api/refresh_projects')
