@@ -4,6 +4,8 @@ This is a local and private asset library for the Godot game engine.
 It is a simple web application that allows you to host your own asset library on your machine.  
 Clone/place your godot asset into the `godot_assets` folder, run the server and import them into your Godot project via the asset library.    
 
+![local asset library in action](/github_assets/asset_library_in_action.png "local asset library in action")
+
 ## Setup
 
 * Clone the repository 
