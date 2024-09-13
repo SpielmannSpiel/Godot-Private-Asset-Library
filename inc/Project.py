@@ -45,6 +45,8 @@ class Project:
 
         self.godot_file = ProjectGodotFile()
         self.godot_file.load_file(self.full_path + "/project.godot")
+        self.name = self.godot_file.get_name(self.name)
+
         self.load_git_data()
         self.zip_date = self.get_zip_date()
 

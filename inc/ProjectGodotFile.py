@@ -8,6 +8,9 @@ class ProjectGodotFile:
         self.full_path = ""
         self.entries = {}
 
+    def get_name(self, fallback=""):
+        return self.entries.get("config/name", fallback)
+
     def get_description(self):
         return self.entries.get("config/description", "")
 
