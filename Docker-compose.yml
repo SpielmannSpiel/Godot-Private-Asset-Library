@@ -3,6 +3,7 @@ version: "3.9"
 services:
   godot_private_asset_library:
     container_name: godot_private_asset_library
+    image: generalbison/godot_private_asset_library:latest
     build:
       context: .
       dockerfile: container/Dockerfile

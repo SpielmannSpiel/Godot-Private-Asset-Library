@@ -67,7 +67,7 @@ Running it exposed to the Internet is your responsibility to make it secure!
 
 ## links
 
-* cross-link GitHub / DockerHub
+* cross-link [GitHub](https://github.com/SpielmannSpiel/Godot-Private-Asset-Library) / [DockerHub](https://hub.docker.com/r/generalbison/godot_private_asset_library)
 * Godot assets formats: https://docs.godotengine.org/en/stable/community/asset_library/submitting_to_assetlib.html
 * Godot asset library API: https://github.com/godotengine/godot-asset-library/blob/master/API.md#api-get-configure
 * Inspiration: https://github.com/christinoleo/godot-custom-assetlib/tree/master / https://github.com/christinoleo/godot-custom-assetlib/tree/master/backend
