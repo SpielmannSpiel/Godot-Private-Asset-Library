@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  godot_asset_library:
-    container_name: godot_asset_library
+  godot_private_asset_library:
+    container_name: godot_private_asset_library
     build:
       context: .
       dockerfile: container/Dockerfile
