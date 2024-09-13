@@ -53,7 +53,7 @@ async def get_project_icon(asset_folder: str):
     if any(_char in asset_folder for _char in ["/", "\\", "."]):
         return FileResponse("static/icon.png")
 
-    asset_path = f"{settings.godot_assets_path_local}/{asset_folder}"
+    asset_path = os.path.join(settings.godot_assets_path_local, asset_folder)
 
     if asset_path in project_icon_cache:
         return FileResponse(project_icon_cache[asset_path])
@@ -69,6 +69,7 @@ async def get_project_icon(asset_folder: str):
                 return FileResponse(full_icon_path)
 
     # fallback
+    project_icon_cache[asset_path] = "static/icon.png"
     return FileResponse("static/icon.png")
 
 
