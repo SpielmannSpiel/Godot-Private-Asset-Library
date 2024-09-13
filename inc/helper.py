@@ -1,3 +1,5 @@
+import os
+import shutil
 from urllib.parse import urlparse
 
 
@@ -30,3 +32,8 @@ def get_license_name(full_license_text: str):
         return "BSD"
 
     return "Proprietary"
+
+
+def zip_dir(_dir, zip_path):
+    shutil.make_archive(zip_path, 'zip', _dir)
+
