@@ -1,5 +1,5 @@
 import os
-import shutil
+import zipfile
 from urllib.parse import urlparse
 
 
@@ -34,6 +34,21 @@ def get_license_name(full_license_text: str):
     return "Proprietary"
 
 
-def zip_dir(_dir, zip_path):
-    shutil.make_archive(zip_path, 'zip', _dir)
+def zip_dir(source_dir, output_filename):
+    rel_root = source_dir
+    with zipfile.ZipFile(output_filename, "w", zipfile.ZIP_DEFLATED) as zip:
+        for root, dirs, files in os.walk(source_dir):
+            relative_path = str(os.path.relpath(root, rel_root))
 
+            # don't include hidden folders
+            if relative_path != "." and relative_path.startswith("."):
+                continue
+
+            # add directory (needed for empty dirs)
+            zip.write(root, relative_path)
+
+            for file in files:
+                filename = str(os.path.join(root, file))
+                if os.path.isfile(filename):  # regular files only
+                    archived_name = os.path.join(relative_path, file)
+                    zip.write(filename, archived_name)
