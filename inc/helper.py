@@ -38,7 +38,7 @@ def get_license_name(full_license_text: str):
 
 def zip_dir(source_dir, output_filename):
     rel_root = source_dir
-    with zipfile.ZipFile(output_filename, "w", zipfile.ZIP_DEFLATED) as zip:
+    with zipfile.ZipFile(output_filename, "w", zipfile.ZIP_DEFLATED) as _zip:
         for root, dirs, files in os.walk(source_dir):
             relative_path = str(os.path.relpath(root, rel_root))
 
@@ -47,10 +47,10 @@ def zip_dir(source_dir, output_filename):
                 continue
 
             # add directory (needed for empty dirs)
-            zip.write(root, relative_path)
+            _zip.write(root, relative_path)
 
             for file in files:
                 filename = str(os.path.join(root, file))
                 if os.path.isfile(filename):  # regular files only
                     archived_name = os.path.join(relative_path, file)
-                    zip.write(filename, archived_name)
+                    _zip.write(filename, archived_name)
