@@ -33,41 +33,45 @@ class ProjectGodotFile:
             return self.is_valid
 
         with open(full_path, 'r') as file:
-
             for row in file:
                 row = row.strip()
 
-                # skip empty lines
-                if not row:
-                    continue
-
-                # exclude comments
-                if row.startswith(';'):
-                    continue
-
-                # exclude sections
-                if row.startswith('['):
-                    continue
-
-                # exclude multiline (for now / until proper parsing is made)
-                if "=" not in row:
-                    continue
-
-                entry_key, entry_value = row.split('=', 1)
-
-                # is string
-                if '"' in entry_value:
-                    entry_value = entry_value.strip('"')  # remove string quotes
-                else:
-                    if entry_value.isdigit():
-                        entry_value = int(entry_value)
-                    else:
-                        entry_value = entry_value
-
-                self.entries[entry_key] = entry_value
+                if self._is_row_valid(row):
+                    self._set_row_value(row)
 
         if self.entries:
             self.is_valid = True
             return self.is_valid
 
         return self.is_valid
+
+    @staticmethod
+    def _is_row_valid(row: str):
+        # skip empty lines
+        if not row:
+            return False
+
+        # exclude comments
+        if row.startswith(';'):
+            return False
+
+        # exclude sections
+        if row.startswith('['):
+            return False
+
+        # exclude multiline (for now / until proper parsing is made)
+        if "=" not in row:
+            return False
+
+        return True
+
+    def _set_row_value(self, row: str):
+        entry_key, entry_value = row.split('=', 1)
+
+        # is string
+        if '"' in entry_value:
+            entry_value = entry_value.strip('"')  # remove string quotes
+        elif entry_value.isdigit():
+            entry_value = int(entry_value)
+
+        self.entries[entry_key] = entry_value

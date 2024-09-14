@@ -51,8 +51,10 @@ async def readme(request: Request):
 
 @app.get('/api/asset/{asset_folder}/icon')
 async def get_project_icon(asset_folder: str):
+    fallback_icon = "static/icon.png"
+
     if any(_char in asset_folder for _char in ["/", "\\", "."]):
-        return FileResponse("static/icon.png")
+        return FileResponse(fallback_icon)
 
     asset_path = os.path.join(settings.godot_assets_path_local, asset_folder)
 
@@ -65,13 +67,14 @@ async def get_project_icon(asset_folder: str):
     for file_name in valid_file_names:
         for extension in valid_extensions:
             full_icon_path = os.path.join(asset_path, f"{file_name}{extension}")
+
             if os.path.isfile(full_icon_path):
                 project_icon_cache[asset_path] = full_icon_path
                 return FileResponse(full_icon_path)
 
     # fallback
-    project_icon_cache[asset_path] = "static/icon.png"
-    return FileResponse("static/icon.png")
+    project_icon_cache[asset_path] = fallback_icon
+    return FileResponse(fallback_icon)
 
 
 @app.get('/api/asset/{asset_folder}/create_zip')
