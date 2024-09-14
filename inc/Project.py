@@ -191,4 +191,3 @@ class Project:
         # Fallback
         helper.zip_dir(self.full_path, self.get_zip_path())
         self.zip_date = self.get_zip_datetime()
-
