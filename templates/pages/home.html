@@ -37,6 +37,15 @@
             reload git repositories
             <img alt="spinner" class="htmx-indicator spinner" src="/static/loading.gif">
         </button>
+        <button
+            class="btn btn-primary"
+            hx-get="/api/create_all_zips"
+            hx-target="#reload-project-results"
+            hx-trigger="click delay:150ms"
+        >
+            (re-)create all zip files
+            <img alt="spinner" class="htmx-indicator spinner" src="/static/loading.gif">
+        </button>
         <div id="reload-project-results" hx-target="#projects-table-list" hx-trigger="changed"></div>
         <div id="reload-zip-action" hx-target="#projects-table-list" hx-trigger="changed"></div>
         <table class="table table-striped" aria-describedby="available Godot assets">

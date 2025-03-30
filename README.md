@@ -30,7 +30,6 @@ Clone/place your godot asset into the `godot_assets` folder, run the server and 
 ![Add type String](/github_assets/add_asset_library_3.png "Add type String")
 ![Add Key-Value pair](/github_assets/add_asset_library_4.png "Add Key-Value pair")
 
-
 ### Locally
 
 * Optionally create a virtual environment with `python -m venv .venv`
@@ -38,7 +37,29 @@ Clone/place your godot asset into the `godot_assets` folder, run the server and 
     * `source .venv/bin/activate` (Mac/Linux) 
     * or `.\venv\Scripts\activate` (Windows)
 * Install the requirements with `pip install -r requirements.txt`
-* Run the server with `uvicorn main:app`
+* Run the server with `uvicorn main:app --port 8080`
+
+Development: `uvicorn main:app --port 8080 --reload`
+
+#### Changing Ports
+
+To change ports you have to
+* use the uvicorn port parameter
+* use an .env file for FastApi
+
+Example:
+```bash
+uvicorn main:app --port 8082 --env-file=.env
+```
+
+You have to write the port into the `.env file`, upper/lowercase is unimportant.  
+
+Example:
+
+```dotenv
+PORT=8082
+app_name="APP name from env"
+```
 
 ### Docker
 

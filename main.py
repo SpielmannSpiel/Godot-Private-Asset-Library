@@ -5,6 +5,7 @@ from timeit import default_timer
 
 from fastapi import FastAPI
 from fastapi import Request
+from fastapi import HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -82,6 +83,11 @@ async def create_zip(asset_folder: str):
     return project_manager.create_zip(asset_folder)
 
 
+@app.get('/api/create_all_zips')
+async def create_all_zips():
+    return await project_manager.create_all_zips()
+
+
 @app.get('/api/refresh_projects')
 async def refresh_projects():
     start_time = default_timer()
@@ -149,3 +155,14 @@ async def list_assets_html(request: Request):
 @app.get('/api/asset/{asset_id}')
 async def get_project_details(asset_id: int):
     return project_manager.get_project_details_api_ready(asset_id)
+
+
+@app.get('/api/infos')
+async def get_infos():
+    if not settings.allow_infos:
+        raise HTTPException(
+            status_code=401,
+            detail="allow_infos Deactivated in settings"
+        )
+
+    return settings.get_infos()

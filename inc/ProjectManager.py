@@ -45,7 +45,7 @@ class ProjectManager:
 
         print(f"Loaded {len(self.projects)} projects in {end_time - start_time} seconds")
 
-    def create_zip(self, asset_folder: str):
+    async def create_zip(self, asset_folder: str):
         for project in self.projects:
             if project.directory == asset_folder:
                 start_time = default_timer()
@@ -61,6 +61,40 @@ class ProjectManager:
         return {
             "status": "error",
             "message": "Project not found"
+        }
+
+    async def create_all_zips(self):
+        start_time = default_timer()
+
+        created_projects = 0
+        failed_projects = 0
+
+        '''
+        for project in self.projects:
+            result = await self.create_zip(project.directory)
+            if result["status"] == "ok":
+                created_projects += 1
+            else:
+                failed_projects += 1
+        '''
+
+        tasks = [asyncio.create_task(self.create_zip(project.directory)) for project in self.projects]
+
+        for coro in asyncio.as_completed(tasks):
+            result = await coro
+            if result["status"] == "ok":
+                created_projects += 1
+            else:
+                failed_projects += 1
+
+        end_time = default_timer()
+        duration = end_time - start_time
+
+        return {
+            "status": "ok",
+            "creations_successful": created_projects,
+            "creations_failed": failed_projects,
+            "duration": duration
         }
 
     @staticmethod
