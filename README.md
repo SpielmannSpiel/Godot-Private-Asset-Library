@@ -74,7 +74,7 @@ docker compose -f docker-compose-local.yml up
 ```
 Rebuild local container
 ```bash
-docker compose -f docker-compose-local.yml build godot_asset_library
+docker compose -f docker-compose-local.yml build godot_private_asset_library
 ```
 
 ## WARNING
