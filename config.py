@@ -25,8 +25,10 @@ class Settings(BaseSettings):
         import sys
 
         return {
-            'argv': sys.argv,
-            **self.model_dump()
+            'system': {
+                'argv': sys.argv,
+            },
+            'settings': self.model_dump()
         }
 
 
