@@ -1,7 +1,6 @@
 # project specific
 /container
 /godot_assets
-/github_assets
 /cache
 
 ### Python ###
