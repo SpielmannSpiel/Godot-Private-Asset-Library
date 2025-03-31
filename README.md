@@ -41,24 +41,35 @@ Clone/place your godot asset into the `godot_assets` folder, run the server and 
 
 Development: `uvicorn main:app --port 8080 --reload`
 
-#### Changing Ports
+#### Config
 
-To change ports you have to
+While you can look up configurable settings in the `config.py` file, please do not change the `config.py`.  
+Use the `.env` as a parameter for uvicorn or environment variables to change the default settings.  
+
+#### Changing HOST / Port
+
+To change host/port you have to
 * use the uvicorn port parameter
 * use an .env file for FastApi
 
-Example:
+Examples:
 ```bash
 uvicorn main:app --port 8082 --env-file=.env
 ```
+```bash
+uvicorn main:app --host 192.168.1.1 --port 8082 --env-file=.env
+```
 
-You have to write the port into the `.env file`, upper/lowercase is unimportant.  
+You have to write the host/port into the `.env` file, upper/lowercase is unimportant.  
+`HOST` is `domain` in the config/.env, since it is just part of the url.  
+You can look up all configurable settings for the `.env` file in the `config.py` file.
 
 Example:
 
 ```dotenv
 PORT=8082
 app_name="APP name from env"
+domain="192.168.1.1"
 ```
 
 ### Docker
