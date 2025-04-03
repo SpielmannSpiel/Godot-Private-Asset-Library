@@ -2,6 +2,8 @@
 /container
 /godot_assets
 /cache
+Docker-compose*.yml
+
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

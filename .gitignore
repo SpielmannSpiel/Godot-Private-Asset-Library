@@ -188,3 +188,4 @@ git_repos/*
 cache/*
 !cache/.gitkeep
 !cache/zip/.gitkeep
+Docker-compose-private.yml

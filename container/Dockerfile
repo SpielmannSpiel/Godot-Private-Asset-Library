@@ -24,7 +24,13 @@ RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
 COPY . /app
 
+# create an empty .env-file to be safely set as a parameter and overmount externally
+RUN touch .env
+
+CMD ["sh", "-c", "uvicorn main:app --host \"${HOST:-0.0.0.0}\" --port \"${PORT:-8080}\" --workers \"${WORKERS:-4}\" --env-file .env"]
+
+# old CMD for refference
+# yes, i probably should just delete this because git... well i just had done this i guess ^^"
 # fastapi run main.py --port 8080 --proxy-headers
 #CMD ["fastapi", "run", "main.py", "--port", "8080", "--proxy-headers"]
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"]
+#CMD ["uvicorn", "main:app", "--host", "${HOST:-0.0.0.0}", "--port", "${PORT:-8080}", "--workers", "4", "--env-file", ".env"]

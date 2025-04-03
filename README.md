@@ -88,6 +88,34 @@ Rebuild local container
 docker compose -f docker-compose-local.yml build godot_private_asset_library
 ```
 
+### Docker Compose
+
+To not go through the whole Docker Compose documentation https://docs.docker.com/compose/ and without complex compose-file-chaining and overriding, here is an example Docker Compose file on how to override the settings.  
+File name (it is also git-ignored): `Docker-compose-private.yml`  
+Use the usual docker-compose commands just with this file name `docker compose -f Docker-compose-private.yml up`.  
+
+```yaml
+version: "3.9"
+
+services:
+  godot_private_asset_library:
+    container_name: godot_private_asset_library
+    # if you want to use this file to build the image
+    build:
+      context: .
+      dockerfile: container/Dockerfile
+    environment:
+      # the environment variables are used for the uvicorn webserver
+      - PORT=8081
+    volumes:
+      - ./godot_assets:/app/godot_assets
+      - ./cache/:/app/cache
+      # the .env file is used for the application inside the container
+      - .env:/app/.env
+    ports:
+      - "8081:8081"
+```
+
 ## WARNING
 
 This was **NEVER MEANT** to be run on the open Internet. It has no access control whatsoever.  

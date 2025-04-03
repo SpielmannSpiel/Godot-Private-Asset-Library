@@ -10,14 +10,16 @@ class Settings(BaseSettings):
     protocol: str = "http"
     domain: str = "127.0.0.1"
     port: int = 8080
-    url: str = f"{protocol}://{domain}:{port}"
     allow_infos: bool = True
+
+    def get_url(self) -> str:
+        return f"{self.protocol}://{self.domain}:{self.port}"
 
     def get_frontend_save_context(self):
         return {
             "app_name": self.app_name,
             "app_version": self.app_version,
-            "url": self.url
+            "url": self.get_url()
         }
 
     def get_infos(self):

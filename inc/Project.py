@@ -139,10 +139,10 @@ class Project:
         return os.path.join(settings.zip_path_local, self.directory + ".zip")
 
     def get_zip_url(self):
-        return settings.url + f"/{pathname2url(self.get_zip_path())}"
+        return settings.get_url() + f"/{pathname2url(self.get_zip_path())}"
 
     def get_icon_url(self):
-        return settings.url + f"/api/asset/{self.directory}/icon"
+        return settings.get_url() + f"/api/asset/{self.directory}/icon"
 
     def has_zip(self):
         return os.path.isfile(self.get_zip_path())
