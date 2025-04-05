@@ -80,7 +80,7 @@ async def get_project_icon(asset_folder: str):
 
 @app.get('/api/asset/{asset_folder}/create_zip')
 async def create_zip(asset_folder: str):
-    return project_manager.create_zip(asset_folder)
+    return await project_manager.create_zip(asset_folder)
 
 
 @app.get('/api/create_all_zips')

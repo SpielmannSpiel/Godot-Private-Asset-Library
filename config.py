@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_version: str = "0.4.0"
+    app_version: str = "0.4.1"
     app_name: str = "Godot Private Asset Library"
     godot_assets_path_local: str = "godot_assets"
     cache_path_local: str = "cache"
