@@ -1,0 +1,20 @@
+<div class="alert
+{% if status == "ok" %}
+    alert-success
+{% else %}
+    alert-danger
+{% endif %}
+" role="alert">
+{% if title %}
+    <h4 class="alert-heading">{{ title }}</h4>
+{% endif %}
+
+    {{ status }}
+
+{% if message %}
+    <p>{{ message|safe }}</p>
+{% endif %}
+
+    <hr>
+    <p class="mb-0">{{ now }} | Duration: {{ duration }}</p>
+</div>

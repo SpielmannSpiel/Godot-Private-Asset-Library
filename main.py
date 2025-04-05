@@ -1,6 +1,7 @@
 import os
 import time
 import asyncio
+from datetime import datetime
 from timeit import default_timer
 
 from fastapi import FastAPI
@@ -78,14 +79,46 @@ async def get_project_icon(asset_folder: str):
     return FileResponse(fallback_icon)
 
 
+@app.get('/htmlapi/asset/{asset_folder}/create_zip', response_class=HTMLResponse)
+async def refresh_projects(asset_folder: str, request: Request):
+    return templates.TemplateResponse(
+        name="status.html",
+        request=request,
+        context=(await create_zip(asset_folder)) | {"now": datetime.now(), "title": "Create Zip: " + asset_folder},
+    )
+
+
 @app.get('/api/asset/{asset_folder}/create_zip')
 async def create_zip(asset_folder: str):
     return await project_manager.create_zip(asset_folder)
 
 
+@app.get('/htmlapi/create_all_zips', response_class=HTMLResponse)
+async def refresh_projects(request: Request):
+    result = await create_all_zips()
+
+    result["message"] = "Created Successfully: " + str(result["creations_successful"])
+    result["message"] += "<br />Creations Failed: " + str(result["creations_failed"])
+
+    return templates.TemplateResponse(
+        name="status.html",
+        request=request,
+        context=result | {"now": datetime.now(), "title": "Create All Zips"},
+    )
+
+
 @app.get('/api/create_all_zips')
 async def create_all_zips():
     return await project_manager.create_all_zips()
+
+
+@app.get('/htmlapi/refresh_projects', response_class=HTMLResponse)
+async def refresh_projects(request: Request):
+    return templates.TemplateResponse(
+        name="status.html",
+        request=request,
+        context=(await refresh_projects()) | {"now": datetime.now(), "title": "Refresh Projects"},
+    )
 
 
 @app.get('/api/refresh_projects')
@@ -99,6 +132,9 @@ async def refresh_projects():
 
     duration = end_time - start_time
 
+    # People tend to NOT notice something did happen when it was too fast
+    # and start clicking wildly on a button.
+    # This fakes at least 1 second of delay for a human to actually "feel" something did happen.
     if duration < 1:
         time.sleep(1 - duration)
 

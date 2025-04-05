@@ -90,8 +90,12 @@ class ProjectManager:
         end_time = default_timer()
         duration = end_time - start_time
 
+        status_result = "ok"
+        if failed_projects > 0:
+            status_result = "error"
+
         return {
-            "status": "ok",
+            "status": status_result,
             "creations_successful": created_projects,
             "creations_failed": failed_projects,
             "duration": duration
