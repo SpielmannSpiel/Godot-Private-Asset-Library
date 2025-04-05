@@ -189,3 +189,5 @@ cache/*
 !cache/.gitkeep
 !cache/zip/.gitkeep
 Docker-compose-private.yml
+
+notes.md
