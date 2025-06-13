@@ -2,7 +2,8 @@
 /container
 /godot_assets
 /cache
-Docker-compose*.yml
+docker-compose.yml
+Docker-compose.yml
 notes.md
 
 
