@@ -112,7 +112,7 @@ class ProjectManager:
 
         return project
 
-    def add_project(self, full_path):
+    def add_project(self, full_path: str):
         project = Project()
         if not project.load_from_path(full_path):
             return False
@@ -133,10 +133,11 @@ class ProjectManager:
 
         return api_ready
 
-    def get_project_api_ready(self, index: int):
-        project = self.projects[index]
+    def get_project_api_ready(self, project_index: int):
+        project = self.projects[project_index]
+
         return {
-            "asset_id": index,
+            "asset_id": project_index,
             "title": project.name,
             "author": project.get_authors(),
             "author_id": "0",
@@ -156,7 +157,10 @@ class ProjectManager:
             "asset_folder": project.directory,
         }
 
-    def get_project_details_api_ready(self, project_index):
+    def get_project_details_api_ready(self, project_index: int):
+        if project_index < 0 or project_index >= len(self.projects):
+            return None
+
         project = self.projects[project_index]
 
         return {

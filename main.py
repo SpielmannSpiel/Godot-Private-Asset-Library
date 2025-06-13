@@ -190,7 +190,14 @@ async def list_assets_html(request: Request):
 
 @app.get('/api/asset/{asset_id}')
 async def get_project_details(asset_id: int):
-    return project_manager.get_project_details_api_ready(asset_id)
+    project = project_manager.get_project_details_api_ready(asset_id)
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Project ID '{asset_id}' not found"
+        )
+
+    return project
 
 
 @app.get('/api/infos')
